@@ -10,7 +10,9 @@
     "lint:eslint": "eslint --cache .",
     "lint:prettier": "prettier --check .",
     "test": "jest",
-    "component": "scaffdog generate component"
+    "component": "scaffdog generate component",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -26,6 +28,11 @@
     "react-error-boundary": "3.1.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/react": "^6.4.9",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^7.0.2",
@@ -36,11 +43,13 @@
     "@types/react": "17.0.37",
     "@typescript-eslint/eslint-plugin": "5.6.0",
     "@typescript-eslint/parser": "5.6.0",
+    "babel-loader": "^8.2.3",
     "eslint": "8.4.1",
     "eslint-config-next": "12.0.7",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-simple-import-sort": "7.0.0",
+    "eslint-plugin-storybook": "^0.5.3",
     "husky": "7.0.4",
     "jest": "^27.4.5",
     "jest-fetch-mock": "^3.0.3",

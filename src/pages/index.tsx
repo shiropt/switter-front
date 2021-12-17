@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 
-import { AppButton } from '@/components/AppButton'
+import { AppButton } from '@/components/shared/AppButtonpButton'
 
 const Home: NextPage = () => {
   const onClick = () => {
