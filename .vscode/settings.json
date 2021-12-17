@@ -11,4 +11,9 @@
     "typescript",
     "typescriptreact",
   ],
+  "cSpell.words": [
+    "nprogress",
+    "Switter",
+    "Vercel"
+  ],
 }

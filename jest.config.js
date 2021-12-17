@@ -1,10 +1,19 @@
-/**
- * @type {import('@jest/types').Config.InitialOptions}
- **/
-const customJestConfig = {
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  modulePathIgnorePatterns: ['<rootDir>/e2e/'],
-  moduleNameMapper: { 'src/(.*)': '<rootDir>/src/$1' }, // Handle module aliases (this will be automatically configured for you soon)
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
+  roots: ['<rootDir>/src'],
+  setupFilesAfterEnv: ['<rootDir>/test/setupTests.ts'],
+  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+  },
+  moduleNameMapper: {
+    '^@/src/(.*)$': '<rootDir>/src/$1',
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  globals: {
+    'ts-jest': {
+      tsconfig: '<rootDir>/test/tsconfig.jest.json',
+    },
+  },
 }
-
-module.exports = createJestConfig(customJestConfig)

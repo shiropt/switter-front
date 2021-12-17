@@ -1,6 +1,7 @@
 import 'nprogress/nprogress.css'
 
 import type { AppProps } from 'next/app'
+import Head from 'next/head'
 import nprogress from 'nprogress'
 import { useEffect } from 'react'
 
@@ -15,7 +16,16 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     nprogress.done()
   })
 
-  return <Component {...pageProps} />
+  return (
+    <>
+      <Head>
+        <title>Switter</title>
+        <meta />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Component {...pageProps} />
+    </>
+  )
 }
 
 export default MyApp
