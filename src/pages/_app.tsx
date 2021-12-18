@@ -1,9 +1,10 @@
 import 'nprogress/nprogress.css'
-
+import { ChakraProvider } from '@chakra-ui/react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import nprogress from 'nprogress'
 import { useEffect } from 'react'
+import { RecoilRoot } from 'recoil'
 
 nprogress.configure({ showSpinner: false, speed: 400, minimum: 0.25 })
 
@@ -23,7 +24,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <meta />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Component {...pageProps} />
+      <RecoilRoot>
+        <ChakraProvider>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </RecoilRoot>
     </>
   )
 }
