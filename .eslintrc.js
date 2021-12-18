@@ -114,8 +114,9 @@ module.exports = {
       rules: {
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         'arrow-body-style': 'off',
-        'import/no-default-export': 'off',
         'simple-import-sort/imports': 'off',
+        'import/no-default-export': 'off',
+        'import/no-anonymous-default-export': 'off',
       },
     },
   ],
