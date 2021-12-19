@@ -1,5 +1,5 @@
 import 'nprogress/nprogress.css'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, Spinner, Center } from '@chakra-ui/react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import nprogress from 'nprogress'
