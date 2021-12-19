@@ -11,3 +11,9 @@ export type PostResponse = {
   createdAt: string
   updatedAt: string
 }
+
+export type PostUserForm = {
+  name?: string
+  email: string
+  password: string
+}
