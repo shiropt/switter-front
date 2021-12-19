@@ -117,6 +117,8 @@ module.exports = {
         'simple-import-sort/imports': 'off',
         'import/no-default-export': 'off',
         'import/no-anonymous-default-export': 'off',
+        '@typescript-eslint/no-unused-vars': 'warn',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
       },
     },
   ],

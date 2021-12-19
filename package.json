@@ -21,6 +21,7 @@
     "printWidth": 120
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.1.1",
     "@chakra-ui/react": "^1.7.3",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
@@ -32,6 +33,7 @@
     "react-dom": "17.0.2",
     "react-error-boundary": "3.1.4",
     "react-hook-form": "^7.22.2",
+    "react-icons": "^4.3.1",
     "recoil": "^0.5.2",
     "swr": "^1.1.2-beta.0"
   },
