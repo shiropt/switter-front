@@ -11,8 +11,8 @@ import { useCertification } from '@/hooks/useCertification'
 
 type HeaderProps = {
   isSignIn: boolean
-  showSignInModal: VoidFunction
-  showSignUpModal: VoidFunction
+  showSignInModal?: VoidFunction
+  showSignUpModal?: VoidFunction
 }
 
 export const Header: VFC<HeaderProps> = (props) => {

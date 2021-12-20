@@ -15,5 +15,5 @@ export const userState = atom<UserInfo>({
 
 export const loadState = atom<boolean>({
   key: 'isLoading',
-  default: true,
+  default: false,
 })

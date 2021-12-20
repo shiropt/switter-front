@@ -4,27 +4,24 @@ import useSWR from 'swr'
 import { Header } from '@/components/shared/Header'
 import { UserModal } from '@/components/shared/UserModal'
 import { useCertification } from '@/hooks/useCertification'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { userState, loadState } from '@/atoms/states'
-import { Spinner, Center } from '@chakra-ui/react'
+import Loading from './Loading'
 
 const Home: NextPage = () => {
   const userInfo = useRecoilValue(userState)
-  const [isLoading, setLoading] = useRecoilState(loadState)
+  const isLoading = useRecoilValue(loadState)
   const { data, error } = useSWR<PostResponse[], Error>('/api/v1/post', fetcher)
   const { showSignInModal, showSignUpModal, isUserModalOpen, onUserModalClose, mode } = useCertification()
 
   if (error) return <p>Error: {error.message}</p>
-  data ? setLoading(false) : setLoading(true)
+  if (!data) return <Loading isSignIn={false} />
+
   return (
     <div>
       <Header isSignIn={userInfo.isSignIn} showSignInModal={showSignInModal} showSignUpModal={showSignUpModal} />
       <UserModal isOpen={isUserModalOpen} onClose={onUserModalClose} mode={mode} />
-      {isLoading && (
-        <Center h="100vh" bg="rgba(0, 0, 0, .3)">
-          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
-        </Center>
-      )}
+      {isLoading && <Loading isSignIn={userInfo.isSignIn} />}
     </div>
   )
 }

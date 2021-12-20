@@ -23,8 +23,35 @@ export const useCertification = () => {
     onUserModalOpen()
   }
 
-  const signIn = (value: PostUserForm) => {
+  const signIn = async (value: PostUserForm) => {
+    setLoading(true)
+    try {
+      await dummyLogin()
+      setUser({ name: 'test user', isSignIn: true })
+      toast({
+        title: `ログインしました`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+    } catch (e) {
+      toast({
+        title: `ログインに失敗しました`,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
+    }
+    setLoading(false)
     return value
+  }
+
+  const dummyLogin = () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('resolve')
+      }, 1000)
+    })
   }
 
   const signUp = async (value: PostUserForm) => {
@@ -36,14 +63,14 @@ export const useCertification = () => {
       toast({
         title: `${name}さんを登録しました`,
         status: 'success',
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       })
     } catch (e) {
       toast({
         title: `登録エラーが発生しました`,
         status: 'error',
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       })
     }
@@ -54,7 +81,7 @@ export const useCertification = () => {
     toast({
       title: `ログアウトしました`,
       status: 'success',
-      duration: 9000,
+      duration: 5000,
       isClosable: true,
     })
   }
