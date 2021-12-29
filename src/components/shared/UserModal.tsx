@@ -6,6 +6,7 @@ import { useCertification } from '@/hooks/useCertification'
 import type { PostUserForm } from '@/types'
 import { AppButton } from './AppButton'
 import { ModalBase } from '../layout/ModalBase'
+import { Certification } from '@/utils/AppUtils'
 
 type UserModalProps = {
   isOpen: boolean
@@ -22,7 +23,7 @@ export const UserModal: VFC<UserModalProps> = ({ mode, ...props }) => {
   } = useForm<PostUserForm>({ reValidateMode: 'onSubmit' })
   const { signIn, signUp } = useCertification()
 
-  const isSignInMode = mode === 'signIn'
+  const isSignInMode = mode === Certification.SignIn
 
   const onSubmit = (value: PostUserForm) => {
     isSignInMode ? signIn(value) : signUp(value)

@@ -11,3 +11,8 @@ export const API = {
   CreateUser: 'http://localhost:3030/api/v1/user',
   CreatePost: 'http://localhost:3030/api/v1/post',
 } as const
+
+export const Certification = {
+  SignIn: 'signIn',
+  SignUp: 'signUp',
+} as const

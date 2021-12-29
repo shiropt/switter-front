@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { userState } from '@/atoms/states'
 import type { PostUserForm } from '@/types'
-import { API } from '@/utils/AppUtils'
+import { API, Certification } from '@/utils/AppUtils'
 import { useRequest } from '@/hooks/useRequest'
 
 export const useCertification = () => {
@@ -14,12 +14,12 @@ export const useCertification = () => {
   const { isOpen: isUserModalOpen, onOpen: onUserModalOpen, onClose: onUserModalClose } = useDisclosure()
 
   const showSignInModal = () => {
-    setMode('signIn')
+    setMode(Certification.SignIn)
     onUserModalOpen()
   }
 
   const showSignUpModal = () => {
-    setMode('signUp')
+    setMode(Certification.SignUp)
     onUserModalOpen()
   }
 
