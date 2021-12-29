@@ -15,6 +15,7 @@ type AppButtonProps = {
   mb?: number
   ml?: number
   m?: number
+  type?: 'submit' | undefined
 }
 
 export const AppButton: VFC<AppButtonProps> = ({ children, ...props }) => {

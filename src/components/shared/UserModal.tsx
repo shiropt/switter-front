@@ -10,12 +10,13 @@ import {
   FormControl,
   Input,
   FormErrorMessage,
-  Button,
+  Box,
   Text,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { useCertification } from '@/hooks/useCertification'
 import type { PostUserForm } from '@/types'
+import { AppButton } from './AppButton'
 
 type UserModalProps = {
   isOpen: boolean
@@ -90,19 +91,9 @@ export const UserModal: VFC<UserModalProps> = ({ mode, ...props }) => {
               <FormErrorMessage>{errors.password && <p>{errors.password.message}</p>}</FormErrorMessage>
               {!errors.password && <Text visibility="hidden">hidden</Text>}
             </FormControl>
-            <Button
-              mr="2"
-              mb="4"
-              float="right"
-              _focus={{ transform: 'scale(0.98)' }}
-              bg={'white'}
-              size={'md'}
-              color={'#DD6B20'}
-              variant={'outline'}
-              type="submit"
-            >
-              {!isSignInMode ? '新規登録' : 'ログイン'}
-            </Button>
+            <Box float="right" mr="2" mb="4">
+              <AppButton type="submit">{!isSignInMode ? '新規登録' : 'ログイン'}</AppButton>
+            </Box>
           </form>
         </ModalBody>
       </ModalContent>

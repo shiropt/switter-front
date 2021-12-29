@@ -1,6 +1,7 @@
 import { atom } from 'recoil'
 
 type UserInfo = {
+  id?: number
   name: string
   isSignIn: boolean
 }
@@ -8,6 +9,7 @@ type UserInfo = {
 export const userState = atom<UserInfo>({
   key: 'userInfo',
   default: {
+    id: undefined,
     name: '',
     isSignIn: false,
   },
