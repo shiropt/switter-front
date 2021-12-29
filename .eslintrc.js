@@ -1,3 +1,5 @@
+const { off } = require('process')
+
 module.exports = {
   root: true,
   env: {
@@ -110,7 +112,7 @@ module.exports = {
       },
     },
     {
-      files: ['**/*.tsx'],
+      files: ['**/*.tsx', '**/*.ts'],
       rules: {
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         'arrow-body-style': 'off',
@@ -119,6 +121,8 @@ module.exports = {
         'import/no-anonymous-default-export': 'off',
         '@typescript-eslint/no-unused-vars': 'warn',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
+        'no-restricted-syntax': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
       },
     },
   ],
