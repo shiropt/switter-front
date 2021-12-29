@@ -1,16 +1,16 @@
 import { useDisclosure, useToast } from '@chakra-ui/react'
-import axios from 'axios'
 import { useState } from 'react'
 import { useSetRecoilState } from 'recoil'
-
-import { loadState, userState } from '@/atoms/states'
+import { userState } from '@/atoms/states'
 import type { PostUserForm } from '@/types'
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+import { API } from '@/utils/AppUtils'
+import { useRequest } from '@/hooks/useRequest'
+
 export const useCertification = () => {
+  const { getRequest, postRequest } = useRequest()
   const [mode, setMode] = useState('')
   const toast = useToast()
   const setUser = useSetRecoilState(userState)
-  const setLoading = useSetRecoilState(loadState)
   const { isOpen: isUserModalOpen, onOpen: onUserModalOpen, onClose: onUserModalClose } = useDisclosure()
 
   const showSignInModal = () => {
@@ -24,58 +24,20 @@ export const useCertification = () => {
   }
 
   const signIn = async (value: PostUserForm) => {
-    setLoading(true)
-    try {
-      await dummyLogin()
-      setUser({ name: 'test user', isSignIn: true })
-      toast({
-        title: `ログインしました`,
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
-    } catch (e) {
-      toast({
-        title: `ログインに失敗しました`,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      })
-    }
-    setLoading(false)
+    const response = await getRequest(API.GetUser, 'ログイン')
+    if (!response) return
+    const user = response.data
+    setUser({ isSignIn: true, name: user.name, id: user.id })
     return value
   }
 
-  const dummyLogin = () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve('resolve')
-      }, 1000)
-    })
+  const signUp = async (value: PostUserForm) => {
+    const response = await postRequest(API.CreateUser, '登録', value)
+    if (!response) return
+    const name = response.data.name
+    setUser({ name, isSignIn: true })
   }
 
-  const signUp = async (value: PostUserForm) => {
-    setLoading(true)
-    try {
-      const response = await axios.post('http://localhost:3030/api/v1/user', value)
-      const name = response.data.name
-      setUser({ name, isSignIn: true })
-      toast({
-        title: `${name}さんを登録しました`,
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
-    } catch (e) {
-      toast({
-        title: `登録エラーが発生しました`,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      })
-    }
-    setLoading(false)
-  }
   const signOut = () => {
     setUser({ name: '', isSignIn: false })
     toast({
