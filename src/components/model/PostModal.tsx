@@ -65,7 +65,7 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
   }
 
   return (
-    <ModalBase title="スイーツ POST ! " {...props} closeButton="OK" height={460} width={750}>
+    <ModalBase title="スイーツ POST ! " {...props} height={460} width={750}>
       <form onSubmit={handleSubmit(postSweets)}>
         <Flex>
           <Box>

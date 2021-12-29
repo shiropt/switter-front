@@ -7,7 +7,6 @@ type PostModalProps = {
   width: number
   children: ReactNode
   isOpen: boolean
-  closeButton: string
   onClose: VoidFunction
 }
 
