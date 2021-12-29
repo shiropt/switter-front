@@ -13,6 +13,7 @@ type HeaderProps = {
   isSignIn: boolean
   showSignInModal?: VoidFunction
   showSignUpModal?: VoidFunction
+  showPostModal?: VoidFunction
 }
 
 export const Header: VFC<HeaderProps> = (props) => {
@@ -20,6 +21,7 @@ export const Header: VFC<HeaderProps> = (props) => {
 
   const { isSignIn, showSignInModal, showSignUpModal } = props
   const showPostModal = () => {
+    props.showPostModal!()
     return
   }
   const { signOut } = useCertification()
