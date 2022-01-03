@@ -1,16 +1,15 @@
-import { useDisclosure, useToast } from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { userState } from '@/atoms/states'
 import type { PostUserForm } from '@/types'
 import { API, Certification } from '@/utils/AppUtils'
 import { useRequest } from '@/hooks/useRequest'
 
 export const useCertification = () => {
-  const { getRequest, postRequest } = useRequest()
+  const { postRequest } = useRequest()
   const [mode, setMode] = useState('')
-  const toast = useToast()
-  const setUser = useSetRecoilState(userState)
+  const [userInfo, setUser] = useRecoilState(userState)
   const { isOpen: isUserModalOpen, onOpen: onUserModalOpen, onClose: onUserModalClose } = useDisclosure()
 
   const showSignInModal = () => {
@@ -24,28 +23,39 @@ export const useCertification = () => {
   }
 
   const signIn = async (value: PostUserForm) => {
-    const response = await getRequest(API.GetUser, 'ログイン')
+    const response = await postRequest(API.SignIn, 'ログイン', value)
     if (!response) return
-    const user = response.data
-    setUser({ isSignIn: true, name: user.name, id: user.id })
-    return value
+    if (response.data.statusCode === 400) {
+      return response.data.message
+    }
+    const { user, AccessToken } = response.data
+    setUser({
+      isSignIn: true,
+      name: user.Username,
+      id: user.UserAttributes[0].Value,
+      AccessToken,
+    })
   }
 
   const signUp = async (value: PostUserForm) => {
-    const response = await postRequest(API.CreateUser, '登録', value)
+    const response = await postRequest(API.SignUp, '登録', value)
     if (!response) return
-    const name = response.data.name
-    setUser({ name, isSignIn: true })
+    if (response.data.statusCode === 400) {
+      return response.data.message
+    }
+    const { user, AccessToken } = response.data
+    setUser({
+      isSignIn: true,
+      name: user.Username,
+      id: user.UserAttributes[0].Value,
+      AccessToken,
+    })
   }
 
-  const signOut = () => {
-    setUser({ name: '', isSignIn: false })
-    toast({
-      title: `ログアウトしました`,
-      status: 'success',
-      duration: 5000,
-      isClosable: true,
-    })
+  const signOut = async () => {
+    const response = await postRequest(API.SignOut, 'ログアウト', userInfo.name)
+    if (!response) return
+    setUser({ name: '', isSignIn: false, AccessToken: '', id: '' })
   }
   return { isUserModalOpen, onUserModalClose, mode, showSignInModal, showSignUpModal, signIn, signUp, signOut }
 }

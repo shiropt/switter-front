@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '@/axios'
 import { useToast } from '@chakra-ui/react'
 import type { AlertStatus } from '@chakra-ui/react'
 import { useSetRecoilState } from 'recoil'
@@ -15,12 +15,22 @@ export const useRequest = () => {
       isClosable: true,
     })
   }
+  const replaceByUrl = (path: string, ...params: string[]) => {
+    let url = path
+    params.forEach((_, i) => {
+      const regexp = new RegExp('%' + (i + 1), 'g')
+      url = url.replace(regexp, params[i])
+    })
+    return url
+  }
 
   const getRequest = async (path: string, message: string) => {
     setLoading(true)
     try {
       const response = await axios.get(path)
-      showToast(message, 'success')
+      if (response.data.statusCode !== 400) {
+        showToast(message, 'success')
+      }
       return response
     } catch {
       showToast(`${message}に失敗`, 'error')
@@ -33,7 +43,9 @@ export const useRequest = () => {
     setLoading(true)
     try {
       const response = await axios.post(path, params)
-      showToast(message, 'success')
+      if (response.data.statusCode !== 400) {
+        showToast(message, 'success')
+      }
       return response
     } catch {
       showToast(`${message}に失敗`, 'error')
@@ -42,5 +54,5 @@ export const useRequest = () => {
     }
   }
 
-  return { postRequest, getRequest }
+  return { postRequest, getRequest, replaceByUrl }
 }

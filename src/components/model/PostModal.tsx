@@ -1,6 +1,6 @@
 import type { VFC } from 'react'
 import { useState } from 'react'
-import { useEffect } from 'react'
+import { useEffect, memo } from 'react'
 import type { PostRequest, PostResponse } from '@/types'
 import {
   Input,
@@ -55,7 +55,10 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
     image.append('file', file[0])
     data.star = star
     data.price = Number(data.price)
-    const request: PostRequest = { ...data, image, userId: userInfo.id! }
+    data.userName = userInfo.name
+
+    const request: PostRequest = { ...data, image, userName: userInfo.name }
+
     const response = await postRequest(API.CreatePost, '投稿', request)
     if (!response) return
     reset()

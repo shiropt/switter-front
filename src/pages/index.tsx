@@ -8,19 +8,20 @@ import { useRecoilValue } from 'recoil'
 import { userState, loadState } from '@/atoms/states'
 import Loading from './Loading'
 import { PostModal } from '@/components/model/PostModal'
-import { useDisclosure, useToast } from '@chakra-ui/react'
-import { useEffect } from 'react'
+import { useDisclosure } from '@chakra-ui/react'
+import { API } from '@/utils/AppUtils'
+import ErrorPage from '@/pages/404'
 
 const Home: NextPage = () => {
   const userInfo = useRecoilValue(userState)
   const isLoading = useRecoilValue(loadState)
-  const { data, error } = useSWR<PostResponse[], Error>('/api/v1/post', fetcher)
+  const { data, error } = useSWR<PostResponse[], Error>(API.GetPosts, fetcher)
   const params = new PostResponse()
 
   const { showSignInModal, showSignUpModal, isUserModalOpen, onUserModalClose, mode } = useCertification()
   const { onClose, isOpen, onOpen: showPostModal } = useDisclosure()
 
-  if (error) return <p>Error: {error.message}</p>
+  if (error) return <ErrorPage />
   if (!data) return <Loading isSignIn={false} />
 
   return (

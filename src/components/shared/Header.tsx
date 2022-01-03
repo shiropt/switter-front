@@ -8,6 +8,7 @@ import { IconContext } from 'react-icons'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { userState, loadState } from '@/atoms/states'
 import { useCertification } from '@/hooks/useCertification'
+import { useRouter } from 'next/router'
 
 type HeaderProps = {
   isSignIn: boolean
@@ -17,6 +18,7 @@ type HeaderProps = {
 }
 
 export const Header: VFC<HeaderProps> = (props) => {
+  const router = useRouter()
   const [userInfo, setUserInfo] = useRecoilState(userState)
 
   const { isSignIn, showSignInModal, showSignUpModal } = props
@@ -25,6 +27,9 @@ export const Header: VFC<HeaderProps> = (props) => {
     return
   }
   const { signOut } = useCertification()
+  const moveToMyPage = () => {
+    router.push(`/user/${userInfo.id}`)
+  }
 
   return (
     <Box bg="pink" w="100%" p={3} color="white" position="fixed">
@@ -48,14 +53,16 @@ export const Header: VFC<HeaderProps> = (props) => {
               POST
             </AppButton>
             <Menu>
-              <MenuButton>
+              <MenuButton instanceId="dsfsfsad">
                 <IconContext.Provider value={{ size: '55px' }}>
                   <HiUserCircle />
                 </IconContext.Provider>
               </MenuButton>
-              <MenuList minWidth="180px" bg="gray.600">
+              <MenuList id="1" minWidth="180px" bg="gray.600">
                 <MenuOptionGroup title={userInfo.name}>
-                  <MenuItem _hover={{ color: 'black' }}>マイページ</MenuItem>
+                  <MenuItem onClick={moveToMyPage} _hover={{ color: 'black' }}>
+                    マイページ
+                  </MenuItem>
                   <MenuItem _hover={{ color: 'black' }}>設定</MenuItem>
                   <MenuItem onClick={signOut} _hover={{ color: 'black' }}>
                     ログアウト
