@@ -90,6 +90,9 @@ const messages = [
 ]
 
 export const transJaMessage = (enMessage: string) => {
-  const errorMessage = messages.find((message) => message.en === enMessage)
-  return errorMessage?.ja
+  if (!enMessage) {
+    return
+  }
+  const errorMessage = messages.find((message) => message.en === enMessage)?.ja || 'エラーが発生しました'
+  return errorMessage
 }
