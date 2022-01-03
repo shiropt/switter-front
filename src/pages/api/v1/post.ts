@@ -6,9 +6,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import type { PostResponse } from '@/types'
 
-const data: PostResponse[] = [
+const data = [
   {
-    id: 1,
     userId: 1,
     title: 'title1',
     contents: 'contents1',
