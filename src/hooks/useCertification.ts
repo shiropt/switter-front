@@ -53,7 +53,8 @@ export const useCertification = () => {
   }
 
   const signOut = async () => {
-    const response = await postRequest(API.SignOut, 'ログアウト', userInfo.name)
+    const name = userInfo.name
+    const response = await postRequest(API.SignOut, 'ログアウト', { name })
     if (!response) return
     setUser({ name: '', isSignIn: false, AccessToken: '', id: '' })
   }
