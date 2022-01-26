@@ -34,7 +34,7 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
   const [file, setFile] = useState<File[]>([])
   const [star, setStar] = useState(params.star)
   const userInfo = useRecoilValue(userState)
-  const { postRequest } = useRequest()
+  const { postRequest, fetchData } = useRequest()
   const {
     register,
     formState: { errors },
@@ -55,16 +55,15 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
     image.append('file', file[0])
     data.star = star
     data.price = Number(data.price)
-    data.userName = userInfo.name
-
-    const request: PostRequest = { ...data, image, userName: userInfo.name }
-
+    const request: PostRequest = { ...data, image, userId: userInfo.id }
     const response = await postRequest(API.CreatePost, '投稿', request)
     if (!response) return
     reset()
     setFile([])
     setStar(0)
     props.onClose()
+    const posts = await fetchData(API.GetPosts)
+    console.log(posts)
   }
 
   return (

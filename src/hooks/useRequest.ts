@@ -54,5 +54,18 @@ export const useRequest = () => {
     }
   }
 
-  return { postRequest, getRequest, replaceByUrl }
+  const fetchData = async (path: string) => {
+    setLoading(true)
+    axios.get(path)
+    try {
+      const response = await axios.get(path)
+      return response.data
+    } catch {
+      showToast(`データの取得に失敗しました`, 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { postRequest, getRequest, replaceByUrl, fetchData }
 }

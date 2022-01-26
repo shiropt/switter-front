@@ -1,7 +1,8 @@
+import type { PostResponse } from '@/types'
 import { atom } from 'recoil'
 
 type UserInfo = {
-  id?: string
+  id: number
   name: string
   isSignIn: boolean
   AccessToken?: string
@@ -10,7 +11,7 @@ type UserInfo = {
 export const userState = atom<UserInfo>({
   key: 'userInfo',
   default: {
-    id: undefined,
+    id: 0,
     name: '',
     isSignIn: false,
     AccessToken: '',

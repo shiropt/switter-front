@@ -1,5 +1,5 @@
 export type PostRequest = {
-  userName: string
+  userId: number
   title: string
   contents?: string
   star: number
@@ -8,12 +8,12 @@ export type PostRequest = {
   image?: FormData
 }
 export class PostResponse {
-  userName = ''
+  userId = 0
   title = ''
   contents = ''
   star = 0
   storeCode = ''
-  price: number | undefined = undefined
+  price?: number = undefined
   image = ''
 }
 

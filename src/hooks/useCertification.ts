@@ -32,7 +32,7 @@ export const useCertification = () => {
     setUser({
       isSignIn: true,
       name: user.Username,
-      id: user.UserAttributes[0].Value,
+      id: user.UserAttributes[0].value,
       AccessToken,
     })
   }
@@ -56,7 +56,7 @@ export const useCertification = () => {
     const name = userInfo.name
     const response = await postRequest(API.SignOut, 'ログアウト', { name })
     if (!response) return
-    setUser({ name: '', isSignIn: false, AccessToken: '', id: '' })
+    setUser({ name: '', isSignIn: false, AccessToken: '', id: 0 })
   }
   return { isUserModalOpen, onUserModalClose, mode, showSignInModal, showSignUpModal, signIn, signUp, signOut }
 }
