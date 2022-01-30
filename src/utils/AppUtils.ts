@@ -1,8 +1,21 @@
+import { Store } from '../types'
+
 const Store = {
   SevenEleven: 'セブンイレブン',
   Lowson: 'ローソン',
   FamilyMart: 'ファミリーマート',
 } as const
+
+export const stores: Store[] = [
+  { code: 'SEVEN_ELEVEN', name: 'セブンイレブン', selected: false },
+  { code: 'LAWSON', name: 'ローソン', selected: false },
+  { code: 'FAMILY_MART', name: 'ファミリーマート', selected: false },
+  { code: 'SEICO_MART', name: 'セイコーマート', selected: false },
+  { code: 'THREE_F', name: 'スリーエフ', selected: false },
+  { code: 'DAILY_YAMAZAKI', name: 'デイリーヤマザキ', selected: false },
+  { code: 'MINISTOP', name: 'ミニストップ', selected: false },
+  { code: 'POPLAR', name: 'ポプラ', selected: false },
+]
 
 export const storeCode = [Store.SevenEleven, Store.Lowson, Store.FamilyMart]
 

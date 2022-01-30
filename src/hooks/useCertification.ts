@@ -47,7 +47,7 @@ export const useCertification = () => {
     setUser({
       isSignIn: true,
       name: user.Username,
-      id: user.UserAttributes[0].Value,
+      id: user.UserAttributes[0].value,
       AccessToken,
     })
   }

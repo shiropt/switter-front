@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-switterfront-dev-160943-authRole",
+      "UnauthRoleArn": "arn:aws:iam::975166125001:role/amplify-switterfront-dev-160943-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::975166125001:role/amplify-switterfront-dev-160943-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-switterfront-dev-160943-deployment",
+      "UnauthRoleName": "amplify-switterfront-dev-160943-unauthRole",
+      "StackName": "amplify-switterfront-dev-160943",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:975166125001:stack/amplify-switterfront-dev-160943/70ea1800-80d2-11ec-9946-0a4c5c380681",
+      "AmplifyAppId": "d2ufduobgp5929"
+    }
+  }
+}

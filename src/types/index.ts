@@ -15,10 +15,17 @@ export class PostResponse {
   storeCode = ''
   price?: number = undefined
   image = ''
+  updatedAt = ''
 }
 
 export type PostUserForm = {
   name?: string
   email: string
   password: string
+}
+
+export type Store = {
+  code: string
+  name: string
+  selected: boolean
 }

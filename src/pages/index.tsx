@@ -8,14 +8,17 @@ import { useRecoilValue } from 'recoil'
 import { userState, loadState } from '@/atoms/states'
 import Loading from './Loading'
 import { PostModal } from '@/components/model/PostModal'
-import { useDisclosure } from '@chakra-ui/react'
-import { API } from '@/utils/AppUtils'
+import { useDisclosure, Flex, Text } from '@chakra-ui/react'
+import { API, stores } from '@/utils/AppUtils'
 import { useEffect, useState } from 'react'
+import { Card } from '../components/shared/Card'
+import { StoreList } from '../components/layout/StoreList'
 
 const Home: NextPage = () => {
   const userInfo = useRecoilValue(userState)
   const isLoading = useRecoilValue(loadState)
   const [posts, setPosts] = useState<PostResponse[]>([])
+  const [showPosts, setShowPosts] = useState<PostResponse[]>([])
   const { fetchData } = useRequest()
   const params = new PostResponse()
 
@@ -26,10 +29,20 @@ const Home: NextPage = () => {
     const fetch = async () => {
       const posts = await fetchData(API.GetPosts)
       setPosts(posts)
+      setShowPosts(posts)
       console.log(posts)
     }
     fetch()
   }, [])
+
+  const selectStore = (storeCode: string) => {
+    if (!storeCode) {
+      setShowPosts(posts)
+      return
+    }
+    const selectedStore = posts.filter((post) => post.storeCode === storeCode)
+    setShowPosts(selectedStore)
+  }
 
   return (
     <div>
@@ -39,6 +52,18 @@ const Home: NextPage = () => {
         showSignUpModal={showSignUpModal}
         showPostModal={showPostModal}
       />
+      <Flex pt="60px">
+        <StoreList selectStore={selectStore} />
+        <Flex ml="250px" w={1250} wrap="wrap">
+          {showPosts.length ? (
+            showPosts.map((post, i) => <Card key={i} post={post} />)
+          ) : (
+            <Text mt={6} fontSize="large">
+              投稿がありません
+            </Text>
+          )}
+        </Flex>
+      </Flex>
       <UserModal isOpen={isUserModalOpen} onClose={onUserModalClose} mode={mode} />
       <PostModal params={params} isOpen={isOpen} onClose={onClose} />
       {isLoading && <Loading isSignIn={userInfo.isSignIn} />}
