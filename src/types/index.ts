@@ -8,6 +8,7 @@ export type PostRequest = {
   image?: FormData
 }
 export class PostResponse {
+  id!: number
   userId = 0
   title = ''
   contents = ''

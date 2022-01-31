@@ -18,7 +18,7 @@ import ReactStars from 'react-stars'
 import { AppButton } from '@/components/shared/AppButton'
 import { ModalBase } from '@/components/layout/ModalBase'
 import { useForm } from 'react-hook-form'
-import { API, storeCode } from '@/utils/AppUtils'
+import { API, storeCode, stores } from '@/utils/AppUtils'
 import { DropZone } from '../shared/DropZone'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/atoms/states'
@@ -28,6 +28,7 @@ type PostModalProps = {
   params: PostResponse
   isOpen: boolean
   onClose: VoidFunction
+  fetchPosts: VoidFunction
 }
 
 export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
@@ -40,7 +41,7 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm<PostRequest>({ defaultValues: { ...params } })
+  } = useForm<PostRequest>({ defaultValues: {} })
 
   useEffect(() => {
     return () => {
@@ -62,8 +63,8 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
     setFile([])
     setStar(0)
     props.onClose()
+    props.fetchPosts()
     const posts = await fetchData(API.GetPosts)
-    console.log(posts)
   }
 
   return (
@@ -73,6 +74,7 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
           <Box>
             <FormControl isInvalid={!!errors.title}>
               <Input
+                maxLength={30}
                 w="xs"
                 mt="2"
                 placeholder="たいとる"
@@ -83,17 +85,26 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
               <FormErrorMessage>{errors.title && <p>{errors.title.message}</p>}</FormErrorMessage>
               {!errors.title && <Text visibility="hidden">hidden</Text>}
             </FormControl>
-            <Textarea resize="none" w="xs" placeholder="こめんと" {...register('contents')} />
+            <Textarea resize="none" w="xs" placeholder="こめんと" maxLength={140} {...register('contents')} />
             <NumberInput mt="4">
-              <NumberInputField w="xs" placeholder="ねだん" {...register('price')} />
+              <NumberInputField maxLength={10} w="xs" placeholder="ねだん" {...register('price')} />
             </NumberInput>
-            <Select w="xs" mt="4" {...register('storeCode')} placeholder="おみせ">
-              {storeCode.map((store, index) => (
-                <option value={store} key={index}>
-                  {store}
-                </option>
-              ))}
-            </Select>
+            <FormControl isInvalid={!!errors.storeCode}>
+              <Select
+                w="xs"
+                mt="4"
+                {...register('storeCode', { required: 'おみせは必須項目です' })}
+                placeholder="おみせ"
+              >
+                {stores.map((store, index) => (
+                  <option value={store.code} key={index}>
+                    {store.name}
+                  </option>
+                ))}
+              </Select>
+              <FormErrorMessage>{errors.storeCode && <p>{errors.storeCode.message}</p>}</FormErrorMessage>
+              {!errors.storeCode && <Text visibility="hidden">hidden</Text>}
+            </FormControl>
             <Flex w="xs" mt="2">
               <Text m="2" mr="6">
                 まんぞく度

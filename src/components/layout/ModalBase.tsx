@@ -14,7 +14,7 @@ export const ModalBase: VFC<PostModalProps> = (props) => {
   return (
     <Modal {...props} size="40px">
       <ModalOverlay />
-      <ModalContent h={props.height} w={props.width}>
+      <ModalContent minH={props.height} w={props.width}>
         <ModalHeader color="#DD6B20">{props.title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>{props.children}</ModalBody>

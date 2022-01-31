@@ -54,6 +54,21 @@ export const useRequest = () => {
     }
   }
 
+  const deleteRequest = async (path: string, message: string) => {
+    setLoading(true)
+    try {
+      const response = await axios.delete(path)
+      if (response.data.statusCode !== 400) {
+        showToast(message, 'success')
+      }
+      return response
+    } catch {
+      showToast(`${message}に失敗`, 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const fetchData = async (path: string) => {
     setLoading(true)
     axios.get(path)
@@ -67,5 +82,5 @@ export const useRequest = () => {
     }
   }
 
-  return { postRequest, getRequest, replaceByUrl, fetchData }
+  return { postRequest, getRequest, replaceByUrl, fetchData, deleteRequest }
 }

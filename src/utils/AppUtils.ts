@@ -27,6 +27,8 @@ export const API = {
   GetUserPosts: 'api/v1/post/user/%1',
   GetUserPost: 'api/v1/post/%1/user/%2',
   CreatePost: 'api/v1/post',
+  UpdatePost: 'api/v1/post',
+  DeletePost: 'api/v1/post/%1',
 } as const
 
 export const Certification = {

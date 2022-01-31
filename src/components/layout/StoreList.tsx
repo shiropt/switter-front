@@ -34,7 +34,7 @@ export const StoreList: VFC<StoreListProps> = (props) => {
     )
   })
   return (
-    <Box mt={10} w={260} h="100%" position="fixed" color=" #DD6B20" fontWeight="bold" fontSize="large">
+    <Box mt={10} h="100%" position="fixed" color=" #DD6B20" fontWeight="bold" fontSize="large">
       <Text
         ml={75}
         onClick={() => selectStore('')}

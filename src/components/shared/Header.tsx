@@ -53,7 +53,7 @@ export const Header: VFC<HeaderProps> = (props) => {
               POST
             </AppButton>
             <Menu>
-              <MenuButton instanceId="dsfsfsad">
+              <MenuButton>
                 <IconContext.Provider value={{ size: '55px' }}>
                   <HiUserCircle />
                 </IconContext.Provider>

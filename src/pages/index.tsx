@@ -8,8 +8,8 @@ import { useRecoilValue } from 'recoil'
 import { userState, loadState } from '@/atoms/states'
 import Loading from './Loading'
 import { PostModal } from '@/components/model/PostModal'
-import { useDisclosure, Flex, Text } from '@chakra-ui/react'
-import { API, stores } from '@/utils/AppUtils'
+import { useDisclosure, Flex, Text, Box } from '@chakra-ui/react'
+import { API } from '@/utils/AppUtils'
 import { useEffect, useState } from 'react'
 import { Card } from '../components/shared/Card'
 import { StoreList } from '../components/layout/StoreList'
@@ -24,15 +24,13 @@ const Home: NextPage = () => {
 
   const { showSignInModal, showSignUpModal, isUserModalOpen, onUserModalClose, mode } = useCertification()
   const { onClose, isOpen, onOpen: showPostModal } = useDisclosure()
-
+  const fetchPosts = async () => {
+    const posts = await fetchData(API.GetPosts)
+    setPosts(posts)
+    setShowPosts(posts)
+  }
   useEffect(() => {
-    const fetch = async () => {
-      const posts = await fetchData(API.GetPosts)
-      setPosts(posts)
-      setShowPosts(posts)
-      console.log(posts)
-    }
-    fetch()
+    fetchPosts()
   }, [])
 
   const selectStore = (storeCode: string) => {
@@ -45,18 +43,18 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div>
+    <Box>
       <Header
         isSignIn={userInfo.isSignIn}
         showSignInModal={showSignInModal}
         showSignUpModal={showSignUpModal}
         showPostModal={showPostModal}
       />
-      <Flex pt="60px">
+      <Flex w="100%" pt="60px">
         <StoreList selectStore={selectStore} />
-        <Flex ml="250px" w={1250} wrap="wrap">
+        <Flex ml="250px" wrap="wrap">
           {showPosts.length ? (
-            showPosts.map((post, i) => <Card key={i} post={post} />)
+            showPosts.map((post, i) => <Card fetchPosts={fetchPosts} key={i} post={post} />)
           ) : (
             <Text mt={6} fontSize="large">
               投稿がありません
@@ -65,9 +63,9 @@ const Home: NextPage = () => {
         </Flex>
       </Flex>
       <UserModal isOpen={isUserModalOpen} onClose={onUserModalClose} mode={mode} />
-      <PostModal params={params} isOpen={isOpen} onClose={onClose} />
+      <PostModal params={params} isOpen={isOpen} onClose={onClose} fetchPosts={fetchPosts} />
       {isLoading && <Loading isSignIn={userInfo.isSignIn} />}
-    </div>
+    </Box>
   )
 }
 
