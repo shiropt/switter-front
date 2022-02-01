@@ -30,7 +30,7 @@ const Home: NextPage = () => {
     setShowPosts(posts)
   }
   useEffect(() => {
-    fetchPosts()
+    // fetchPosts()
   }, [])
 
   const selectStore = (storeCode: string) => {

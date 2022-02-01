@@ -28,7 +28,7 @@ export const DetailModal: VFC<UserModalProps> = ({ ...props }) => {
   }, [props.isOpen])
 
   return (
-    <ModalBase title={post.title} {...props} height={490} width={600}>
+    <ModalBase title={post.title} {...props} height={490} width={700}>
       <Flex>
         <Text fontWeight="bold">おすすめ度：</Text>
         <Box mt={-1.5}>
@@ -39,7 +39,7 @@ export const DetailModal: VFC<UserModalProps> = ({ ...props }) => {
         <Text ml={2}>{post.price ? `${post.price}円` : null}</Text>
       </Flex>
       <Text>{post.contents}</Text>
-      <Image src={`${post.image}550/300`} alt="投稿画像" m="0 auto" />
+      <Image src={`${post.image}/600/300`} alt="投稿画像" m="0 auto" />
 
       <Text float="right" mr={2} color="gray.500">
         {formatDate(post.updatedAt)}

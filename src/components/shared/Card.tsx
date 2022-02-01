@@ -83,7 +83,7 @@ export const Card: VFC<CardProps> = (props) => {
         loading="lazy"
         width="270px"
         height="200px"
-        src={`${post.image}270/200`}
+        src={`${post.image}/200/300`}
         fallbackSrc="https://via.placeholder.com/150"
         alt="投稿画像"
       />
