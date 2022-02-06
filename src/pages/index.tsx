@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
-import { PostResponse } from '@/types'
+import { PostRequest } from '@/types'
+import type { PostResponse } from '@/types'
 import { Header } from '@/components/shared/Header'
 import { UserModal } from '@/components/shared/UserModal'
 import { useCertification } from '@/hooks/useCertification'
@@ -20,7 +21,7 @@ const Home: NextPage = () => {
   const [posts, setPosts] = useState<PostResponse[]>([])
   const [showPosts, setShowPosts] = useState<PostResponse[]>([])
   const { fetchData } = useRequest()
-  const params = new PostResponse()
+  const params = new PostRequest()
 
   const { showSignInModal, showSignUpModal, isUserModalOpen, onUserModalClose, mode } = useCertification()
   const { onClose, isOpen, onOpen: showPostModal } = useDisclosure()
@@ -30,7 +31,8 @@ const Home: NextPage = () => {
     setShowPosts(posts)
   }
   useEffect(() => {
-    // fetchPosts()
+    fetchPosts()
+    console.log(posts)
   }, [])
 
   const selectStore = (storeCode: string) => {
@@ -63,7 +65,7 @@ const Home: NextPage = () => {
         </Flex>
       </Flex>
       <UserModal isOpen={isUserModalOpen} onClose={onUserModalClose} mode={mode} />
-      <PostModal params={params} isOpen={isOpen} onClose={onClose} fetchPosts={fetchPosts} />
+      <PostModal isEditMode={false} params={params} isOpen={isOpen} onClose={onClose} fetchPosts={fetchPosts} />
       {isLoading && <Loading isSignIn={userInfo.isSignIn} />}
     </Box>
   )

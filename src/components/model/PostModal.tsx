@@ -25,25 +25,28 @@ import { userState } from '@/atoms/states'
 import { useRequest } from '@/hooks/useRequest'
 
 type PostModalProps = {
-  params: PostResponse
+  params: PostRequest
   isOpen: boolean
+  isEditMode: boolean
   onClose: VoidFunction
   fetchPosts: VoidFunction
 }
 
 export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
   const [file, setFile] = useState<File[]>([])
+  const [imageData, setImageData] = useState('')
   const [star, setStar] = useState(params.star)
   const userInfo = useRecoilValue(userState)
-  const { postRequest, fetchData } = useRequest()
+  const { postRequest, putRequest } = useRequest()
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm<PostRequest>({ defaultValues: {} })
+  } = useForm<PostRequest>({ defaultValues: { ...params } })
 
   useEffect(() => {
+    setStar(params.star)
     return () => {
       reset()
       setFile([])
@@ -51,20 +54,62 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
     }
   }, [props.isOpen])
 
-  const postSweets = async (data: Omit<PostRequest, 'image'>) => {
-    const image = new FormData()
-    image.append('file', file[0])
+  const upload = (data: File[]) => {
+    setFile(data)
+    const fileReader = new FileReader()
+    fileReader.readAsDataURL(data[0])
+    fileReader.onload = () => {
+      const base64 = fileReader.result as string
+      resizeUpload(base64)
+    }
+  }
+
+  const createFileExtension = (image: string) => {
+    return image.toString().slice(image.indexOf('/') + 1, image.indexOf(';'))
+  }
+
+  const resizeUpload = (base64: string) => {
+    const imgType = base64.substring(5, base64.indexOf(';'))
+    const img = new Image()
+    img.onload = async () => {
+      const canvas = document.createElement('canvas')
+      const width = img.width * 0.25
+      const height = img.height * 0.25
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')!
+      ctx.drawImage(img, 0, 0, width, height)
+      const reSizeData = canvas.toDataURL(imgType)
+      setImageData(reSizeData)
+    }
+    img.src = base64
+  }
+
+  const postSweets = async (data: PostRequest) => {
     data.star = star
     data.price = Number(data.price)
-    const request: PostRequest = { ...data, image, userId: userInfo.id }
-    const response = await postRequest(API.CreatePost, '投稿', request)
-    if (!response) return
+    if (file.length) {
+      data.image = createFileExtension(imageData)
+    } else {
+      data.image = params.image
+    }
+
+    if (props.isEditMode) {
+      const request: PostRequest = { ...data, imageData, userId: userInfo.id, id: params.id }
+
+      const response = await putRequest(API.UpdatePost, '更新', request)
+      if (!response) return
+    } else {
+      const request: PostRequest = { ...data, imageData, userId: userInfo.id }
+      const response = await postRequest(API.CreatePost, '投稿', request)
+      if (!response) return
+    }
+
     reset()
     setFile([])
     setStar(0)
     props.onClose()
     props.fetchPosts()
-    const posts = await fetchData(API.GetPosts)
   }
 
   return (
@@ -85,14 +130,24 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
               <FormErrorMessage>{errors.title && <p>{errors.title.message}</p>}</FormErrorMessage>
               {!errors.title && <Text visibility="hidden">hidden</Text>}
             </FormControl>
-            <Textarea resize="none" w="xs" placeholder="こめんと" maxLength={140} {...register('contents')} />
+            <FormControl isInvalid={!!errors.storeCode}>
+              <Textarea
+                resize="none"
+                w="xs"
+                placeholder="こめんと"
+                maxLength={140}
+                {...register('contents', { required: 'こめんとは必須です' })}
+              />
+              <FormErrorMessage>{errors.contents && <p>{errors.contents.message}</p>}</FormErrorMessage>
+              {!errors.contents && <Text visibility="hidden">hidden</Text>}
+            </FormControl>
             <NumberInput mt="4">
               <NumberInputField maxLength={10} w="xs" placeholder="ねだん" {...register('price')} />
             </NumberInput>
             <FormControl isInvalid={!!errors.storeCode}>
               <Select
                 w="xs"
-                mt="4"
+                mt="7"
                 {...register('storeCode', { required: 'おみせは必須項目です' })}
                 placeholder="おみせ"
               >
@@ -113,10 +168,10 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
             </Flex>
           </Box>
           <Box ml="4">
-            <DropZone file={file} setFile={setFile} />
+            <DropZone params={params} isEditMode={props.isEditMode} file={file} setFile={upload} />
           </Box>
         </Flex>
-        <Box float="right" mt="6">
+        <Box float="right" mt={-10}>
           <AppButton type="submit">OK</AppButton>
         </Box>
       </form>

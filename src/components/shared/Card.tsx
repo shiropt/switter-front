@@ -8,10 +8,11 @@ import { CgMenuGridO } from 'react-icons/cg'
 import { FiEdit, FiTrash2 } from 'react-icons/fi'
 import { IconContext } from 'react-icons'
 import { useRequest } from '@/hooks/useRequest'
-import { API } from '../../utils/AppUtils'
+import { API, ImageUrl } from '../../utils/AppUtils'
 import { ConfirmModal } from './ComfirmModal'
 import { userState } from '@/atoms/states'
 import { useRecoilState } from 'recoil'
+import { PostModal } from '@/components/model/PostModal'
 
 type CardProps = {
   post: PostResponse
@@ -24,13 +25,17 @@ export const Card: VFC<CardProps> = (props) => {
   const { splitContent, formatDate } = useFormatter()
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false)
   const [userInfo, setUser] = useRecoilState(userState)
   const [alertMessage, setAlertMessage] = useState('')
+  const date = new Date().getTime()
+
   const showPostMenu = (event: SyntheticEvent) => {
     event.stopPropagation()
   }
   const updatePost = (event: SyntheticEvent) => {
     event.stopPropagation()
+    setIsPostModalOpen(true)
   }
   const deleteClick = async (event: SyntheticEvent) => {
     event.stopPropagation()
@@ -54,7 +59,7 @@ export const Card: VFC<CardProps> = (props) => {
       _hover={{ bg: '#F5F5F5', cursor: 'pointer' }}
       onClick={() => setIsDetailModalOpen(true)}
     >
-      <Heading as="h4" size="md">
+      <Heading as="h4" size="md" color="#DD6B20">
         {splitContent(post.title, 12)}
       </Heading>
       <Flex justifyContent="space-between">
@@ -83,8 +88,8 @@ export const Card: VFC<CardProps> = (props) => {
         loading="lazy"
         width="270px"
         height="200px"
-        src={`${post.image}/200/300`}
-        fallbackSrc="https://via.placeholder.com/150"
+        objectFit="cover"
+        src={post.image ? `${ImageUrl.post}${post.id}.${post.image}?${date}` : `${ImageUrl.noImage}`}
         alt="投稿画像"
       />
       <Text float="right" mr={2} color="gray.500">
@@ -96,6 +101,13 @@ export const Card: VFC<CardProps> = (props) => {
         onClose={() => setIsConfirmModalOpen(false)}
         okCallBack={deletePost}
         message={alertMessage}
+      />
+      <PostModal
+        params={post}
+        isEditMode={true}
+        isOpen={isPostModalOpen}
+        onClose={() => setIsPostModalOpen(false)}
+        fetchPosts={props.fetchPosts}
       />
     </Box>
   )

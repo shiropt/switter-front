@@ -54,6 +54,21 @@ export const useRequest = () => {
     }
   }
 
+  const putRequest = async <T>(path: string, message: string, params: T) => {
+    setLoading(true)
+    try {
+      const response = await axios.put(path, params)
+      if (response.data.statusCode !== 400) {
+        showToast(message, 'success')
+      }
+      return response
+    } catch {
+      showToast(`${message}に失敗`, 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const deleteRequest = async (path: string, message: string) => {
     setLoading(true)
     try {
@@ -82,5 +97,5 @@ export const useRequest = () => {
     }
   }
 
-  return { postRequest, getRequest, replaceByUrl, fetchData, deleteRequest }
+  return { postRequest, getRequest, replaceByUrl, fetchData, deleteRequest, putRequest }
 }

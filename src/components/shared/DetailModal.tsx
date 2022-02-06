@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { Image, Flex, Spacer, Box, Text } from '@chakra-ui/react'
 import type { PostResponse } from '@/types'
 import { ModalBase } from '../layout/ModalBase'
-import { stores } from '@/utils/AppUtils'
+import { ImageUrl, stores } from '@/utils/AppUtils'
 import ReactStars from 'react-stars'
 import { useFormatter } from '../../hooks/useFormatter'
 
@@ -16,6 +16,7 @@ type UserModalProps = {
 
 export const DetailModal: VFC<UserModalProps> = ({ ...props }) => {
   const { post } = props
+  const date = new Date().getTime()
 
   const [storeName, setStoreName] = useState('')
   const { formatDate } = useFormatter()
@@ -28,7 +29,7 @@ export const DetailModal: VFC<UserModalProps> = ({ ...props }) => {
   }, [props.isOpen])
 
   return (
-    <ModalBase title={post.title} {...props} height={490} width={700}>
+    <ModalBase title={post.title} {...props} height={490} width={600}>
       <Flex>
         <Text fontWeight="bold">おすすめ度：</Text>
         <Box mt={-1.5}>
@@ -39,7 +40,14 @@ export const DetailModal: VFC<UserModalProps> = ({ ...props }) => {
         <Text ml={2}>{post.price ? `${post.price}円` : null}</Text>
       </Flex>
       <Text>{post.contents}</Text>
-      <Image src={`${post.image}/600/300`} alt="投稿画像" m="0 auto" />
+      <Image
+        src={post.image ? `${ImageUrl.post}${post.id}.${post.image}?${date}` : `${ImageUrl.noImage}`}
+        objectFit="cover"
+        height="300px"
+        minWidth="400px"
+        alt="投稿画像"
+        m="0 auto"
+      />
 
       <Text float="right" mr={2} color="gray.500">
         {formatDate(post.updatedAt)}

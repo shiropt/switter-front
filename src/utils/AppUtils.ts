@@ -35,3 +35,8 @@ export const Certification = {
   SignIn: 'signIn',
   SignUp: 'signUp',
 } as const
+
+export const ImageUrl = {
+  post: 'https://switter-image2.s3.ap-northeast-1.amazonaws.com/posts/',
+  noImage: 'http://design-ec.com/d/e_others_50/m_e_others_500.png',
+} as const

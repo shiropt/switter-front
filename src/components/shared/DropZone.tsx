@@ -3,27 +3,42 @@ import type { VFC } from 'react'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { AppButton } from './AppButton'
+import type { PostRequest } from '@/types'
+import { ImageUrl } from '../../utils/AppUtils'
 
 type DropZoneProps = {
   file: File[]
   setFile: (file: File[]) => void
+  isEditMode: boolean
+  params: PostRequest
 }
 
-export const DropZone: VFC<DropZoneProps> = ({ file, setFile }) => {
+export const DropZone: VFC<DropZoneProps> = ({ file, setFile, isEditMode, params }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       setFile(acceptedFiles)
     },
     [file]
   )
+  const date = new Date().getTime()
 
   const { getRootProps, getInputProps, open } = useDropzone({ onDrop })
   return (
     <Box>
       <Box mt="2" w="360px" h="230px" {...getRootProps()} border="1px  #e7e0e0 solid" borderRadius="1px">
         <input {...getInputProps()} />
-        {file.length ? (
-          <Image fit="contain" w="360px" height="200px" src={URL.createObjectURL(file[0])} alt="アップロード画像" />
+        {(isEditMode && params.image) || file.length ? (
+          <Image
+            fit="cover"
+            w="400px"
+            height="227px"
+            src={
+              isEditMode && !file.length
+                ? `${ImageUrl.post}${params.id}.${params.image}?${date}`
+                : URL.createObjectURL(file[0])
+            }
+            alt="アップロード画像"
+          />
         ) : (
           <Text textAlign="center" mt="10" color="#9b9595 ">
             画像をドラッグ

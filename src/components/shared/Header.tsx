@@ -52,7 +52,10 @@ export const Header: VFC<HeaderProps> = (props) => {
             <AppButton mr={4} mt={1} onClick={showPostModal}>
               POST
             </AppButton>
-            <Menu>
+            <AppButton mt={1} onClick={signOut}>
+              ログアウト
+            </AppButton>
+            {/* <Menu>
               <MenuButton>
                 <IconContext.Provider value={{ size: '55px' }}>
                   <HiUserCircle />
@@ -69,7 +72,7 @@ export const Header: VFC<HeaderProps> = (props) => {
                   </MenuItem>
                 </MenuOptionGroup>
               </MenuList>
-            </Menu>
+            </Menu> */}
           </Flex>
         ) : (
           <Box mr="4">

@@ -14,11 +14,11 @@ export const ConfirmModal: VFC<UserModalProps> = ({ ...props }) => {
   return (
     <ModalBase title={`${props.message}してもよろしいですか？`} {...props} height={140} width={380}>
       <Flex justifyContent="space-around">
-        <Button size="lg" onClick={props.okCallBack}>
-          はい
-        </Button>
         <Button size="lg" onClick={props.onClose}>
           いいえ
+        </Button>
+        <Button size="lg" onClick={props.okCallBack}>
+          はい
         </Button>
       </Flex>
     </ModalBase>

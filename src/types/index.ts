@@ -1,11 +1,13 @@
-export type PostRequest = {
-  userId: number
-  title: string
-  contents?: string
-  star: number
-  storeCode: string
-  price?: number
-  image?: FormData
+export class PostRequest {
+  id?: number = 0
+  userId = 0
+  title = ''
+  contents?: string = ''
+  star = 0
+  storeCode = ''
+  price?: number = undefined
+  image?: string = ''
+  imageData? = ''
 }
 export class PostResponse {
   id!: number
