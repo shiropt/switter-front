@@ -5,6 +5,7 @@ import Head from 'next/head'
 import nprogress from 'nprogress'
 import { useEffect } from 'react'
 import { RecoilRoot } from 'recoil'
+import { AnimatePresence } from 'framer-motion'
 
 nprogress.configure({ showSpinner: false, speed: 400, minimum: 0.25 })
 
@@ -24,11 +25,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <meta />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <RecoilRoot>
-        <ChakraProvider>
-          <Component {...pageProps} />
-        </ChakraProvider>
-      </RecoilRoot>
+      <AnimatePresence exitBeforeEnter>
+        <RecoilRoot>
+          <ChakraProvider>
+            <Component {...pageProps} />
+          </ChakraProvider>
+        </RecoilRoot>
+      </AnimatePresence>
     </>
   )
 }

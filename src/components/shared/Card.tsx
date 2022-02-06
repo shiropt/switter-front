@@ -1,6 +1,8 @@
-import type { MouseEventHandler, SyntheticEvent, VFC } from 'react'
+import type { SyntheticEvent, VFC } from 'react'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { Box, Heading, Image, Text, Flex, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
+
 import type { PostResponse } from '@/types'
 import { useFormatter } from '../../hooks/useFormatter'
 import { DetailModal } from './DetailModal'
@@ -29,7 +31,7 @@ export const Card: VFC<CardProps> = (props) => {
   const [userInfo, setUser] = useRecoilState(userState)
   const [alertMessage, setAlertMessage] = useState('')
   const date = new Date().getTime()
-
+  const MotionBox = motion(Box)
   const showPostMenu = (event: SyntheticEvent) => {
     event.stopPropagation()
   }
@@ -50,12 +52,14 @@ export const Card: VFC<CardProps> = (props) => {
   }
 
   return (
-    <Box
+    <MotionBox
+      whileHover={{ scale: 1.03 }}
       p="2px"
       m={1}
       pr={4}
       pl={4}
-      pt={5}
+      mt={5}
+      pt={2}
       _hover={{ bg: '#F5F5F5', cursor: 'pointer' }}
       onClick={() => setIsDetailModalOpen(true)}
     >
@@ -109,6 +113,6 @@ export const Card: VFC<CardProps> = (props) => {
         onClose={() => setIsPostModalOpen(false)}
         fetchPosts={props.fetchPosts}
       />
-    </Box>
+    </MotionBox>
   )
 }

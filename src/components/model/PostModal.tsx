@@ -1,7 +1,7 @@
 import type { VFC } from 'react'
 import { useState } from 'react'
-import { useEffect, memo } from 'react'
-import type { PostRequest, PostResponse } from '@/types'
+import { useEffect } from 'react'
+import type { PostRequest } from '@/types'
 import {
   Input,
   FormErrorMessage,
@@ -18,11 +18,12 @@ import ReactStars from 'react-stars'
 import { AppButton } from '@/components/shared/AppButton'
 import { ModalBase } from '@/components/layout/ModalBase'
 import { useForm } from 'react-hook-form'
-import { API, storeCode, stores } from '@/utils/AppUtils'
+import { API, stores } from '@/utils/AppUtils'
 import { DropZone } from '../shared/DropZone'
 import { useRecoilValue } from 'recoil'
 import { userState } from '@/atoms/states'
 import { useRequest } from '@/hooks/useRequest'
+import { useImageUpload } from '../../hooks/useUpload'
 
 type PostModalProps = {
   params: PostRequest
@@ -33,11 +34,10 @@ type PostModalProps = {
 }
 
 export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
-  const [file, setFile] = useState<File[]>([])
-  const [imageData, setImageData] = useState('')
   const [star, setStar] = useState(params.star)
   const userInfo = useRecoilValue(userState)
   const { postRequest, putRequest } = useRequest()
+  const { file, setFile, imageData, createFileExtension, upload } = useImageUpload()
   const {
     register,
     formState: { errors },
@@ -54,37 +54,6 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
     }
   }, [props.isOpen])
 
-  const upload = (data: File[]) => {
-    setFile(data)
-    const fileReader = new FileReader()
-    fileReader.readAsDataURL(data[0])
-    fileReader.onload = () => {
-      const base64 = fileReader.result as string
-      resizeUpload(base64)
-    }
-  }
-
-  const createFileExtension = (image: string) => {
-    return image.toString().slice(image.indexOf('/') + 1, image.indexOf(';'))
-  }
-
-  const resizeUpload = (base64: string) => {
-    const imgType = base64.substring(5, base64.indexOf(';'))
-    const img = new Image()
-    img.onload = async () => {
-      const canvas = document.createElement('canvas')
-      const width = img.width * 0.25
-      const height = img.height * 0.25
-      canvas.width = width
-      canvas.height = height
-      const ctx = canvas.getContext('2d')!
-      ctx.drawImage(img, 0, 0, width, height)
-      const reSizeData = canvas.toDataURL(imgType)
-      setImageData(reSizeData)
-    }
-    img.src = base64
-  }
-
   const postSweets = async (data: PostRequest) => {
     data.star = star
     data.price = Number(data.price)
@@ -93,15 +62,13 @@ export const PostModal: VFC<PostModalProps> = ({ params, ...props }) => {
     } else {
       data.image = params.image
     }
-
-    if (props.isEditMode) {
-      const request: PostRequest = { ...data, imageData, userId: userInfo.id, id: params.id }
-
-      const response = await putRequest(API.UpdatePost, '更新', request)
-      if (!response) return
-    } else {
+    if (!props.isEditMode) {
       const request: PostRequest = { ...data, imageData, userId: userInfo.id }
       const response = await postRequest(API.CreatePost, '投稿', request)
+      if (!response) return
+    } else {
+      const request: PostRequest = { ...data, imageData, userId: userInfo.id, id: params.id }
+      const response = await putRequest(API.UpdatePost, '更新', request)
       if (!response) return
     }
 
