@@ -1,5 +1,7 @@
+/* eslint-disable react/display-name */
 import type { SyntheticEvent, VFC } from 'react'
-import { useState } from 'react'
+import { useCallback } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { motion } from 'framer-motion'
 import { Box, Heading, Image, Text, Flex, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 
@@ -21,29 +23,39 @@ type CardProps = {
   fetchPosts: VoidFunction
 }
 
-export const Card: VFC<CardProps> = (props) => {
+export const Card: VFC<CardProps> = memo((props) => {
   const { deleteRequest, replaceByUrl } = useRequest()
   const { post } = props
   const { splitContent, formatDate } = useFormatter()
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
   const [isPostModalOpen, setIsPostModalOpen] = useState(false)
-  const [userInfo, setUser] = useRecoilState(userState)
+  const [userInfo] = useRecoilState(userState)
   const [alertMessage, setAlertMessage] = useState('')
   const date = new Date().getTime()
   const MotionBox = motion(Box)
+
+  useEffect(() => {
+    console.log('レンダリング')
+  })
   const showPostMenu = (event: SyntheticEvent) => {
     event.stopPropagation()
   }
-  const updatePost = (event: SyntheticEvent) => {
-    event.stopPropagation()
-    setIsPostModalOpen(true)
-  }
-  const deleteClick = async (event: SyntheticEvent) => {
-    event.stopPropagation()
-    setAlertMessage(`削除`)
-    setIsConfirmModalOpen(true)
-  }
+  const updatePost = useCallback(
+    (event: SyntheticEvent) => {
+      event.stopPropagation()
+      setIsPostModalOpen(true)
+    },
+    [isPostModalOpen]
+  )
+  const deleteClick = useCallback(
+    (event: SyntheticEvent) => {
+      event.stopPropagation()
+      setAlertMessage(`削除`)
+      setIsConfirmModalOpen(true)
+    },
+    [isConfirmModalOpen]
+  )
   const deletePost = async () => {
     const path = replaceByUrl(API.DeletePost, post.id.toString())
     await deleteRequest(path, '削除')
@@ -115,4 +127,4 @@ export const Card: VFC<CardProps> = (props) => {
       />
     </MotionBox>
   )
-}
+})

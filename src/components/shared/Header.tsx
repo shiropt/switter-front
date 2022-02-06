@@ -1,4 +1,5 @@
 import type { VFC } from 'react'
+import { useCallback } from 'react'
 import { Box, Heading, Flex, Spacer } from '@chakra-ui/react'
 import { AppButton } from './AppButton'
 import { MenuButton, Menu, MenuList, MenuOptionGroup, MenuItem, MenuDivider } from '@chakra-ui/react'
@@ -22,17 +23,17 @@ export const Header: VFC<HeaderProps> = (props) => {
   const [userInfo, setUserInfo] = useRecoilState(userState)
 
   const { isSignIn, showSignInModal, showSignUpModal } = props
-  const showPostModal = () => {
+  const showPostModal = useCallback(() => {
     props.showPostModal!()
     return
-  }
+  }, [])
   const { signOut } = useCertification()
   const moveToMyPage = () => {
     router.push(`/user/${userInfo.id}`)
   }
 
   return (
-    <Box bg="pink" w="100%" p={3} color="white" position="fixed">
+    <Box bg="pink" w="100%" p={3} color="white" position="fixed" zIndex={999}>
       <Flex>
         <Box w="180px" borderRadius="md" bg="white" p={2} cursor="pointer">
           <Heading size="lg" color="pink">

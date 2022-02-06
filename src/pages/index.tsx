@@ -11,7 +11,7 @@ import Loading from './Loading'
 import { PostModal } from '@/components/model/PostModal'
 import { useDisclosure, Flex, Text, Box } from '@chakra-ui/react'
 import { API } from '@/utils/AppUtils'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Card } from '../components/shared/Card'
 import { StoreList } from '../components/layout/StoreList'
 
@@ -32,17 +32,19 @@ const Home: NextPage = () => {
   }
   useEffect(() => {
     fetchPosts()
-    console.log(posts)
   }, [])
 
-  const selectStore = (storeCode: string) => {
-    if (!storeCode) {
-      setShowPosts(posts)
-      return
-    }
-    const selectedStore = posts.filter((post) => post.storeCode === storeCode)
-    setShowPosts(selectedStore)
-  }
+  const selectStore = useCallback(
+    (storeCode: string) => {
+      if (!storeCode) {
+        setShowPosts(posts)
+        return
+      }
+      const selectedStore = posts.filter((post) => post.storeCode === storeCode)
+      setShowPosts(selectedStore)
+    },
+    [showPosts]
+  )
 
   return (
     <Box>

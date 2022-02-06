@@ -1,5 +1,5 @@
 import { useDisclosure } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { userState } from '@/atoms/states'
 import type { PostUserForm } from '@/types'
@@ -12,15 +12,15 @@ export const useCertification = () => {
   const [userInfo, setUser] = useRecoilState(userState)
   const { isOpen: isUserModalOpen, onOpen: onUserModalOpen, onClose: onUserModalClose } = useDisclosure()
 
-  const showSignInModal = () => {
+  const showSignInModal = useCallback(() => {
     setMode(Certification.SignIn)
     onUserModalOpen()
-  }
+  }, [isUserModalOpen, mode])
 
-  const showSignUpModal = () => {
+  const showSignUpModal = useCallback(() => {
     setMode(Certification.SignUp)
     onUserModalOpen()
-  }
+  }, [isUserModalOpen, mode])
 
   const signIn = async (value: PostUserForm) => {
     const response = await postRequest(API.SignIn, 'ログイン', value)
